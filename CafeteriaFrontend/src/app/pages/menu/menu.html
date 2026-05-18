@@ -1,0 +1,50 @@
+<div class="menu-container">
+  <!-- Header Section -->
+  <header class="header">
+    <div class="brand">
+      <h1>🍔 Company Cafeteria</h1>
+    </div>
+    <div class="header-actions">
+      <button class="admin-btn" *ngIf="authService.isAdmin()" (click)="router.navigate(['/admin'])">⚙️ Admin Dashboard</button>
+      <button class="orders-btn" (click)="router.navigate(['/orders'])">📋 Orders</button>
+      <button class="cart-btn" (click)="goToCart()">
+        🛒 Cart ({{ getTotalItems() }})
+      </button>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Categories Filter -->
+  <div class="categories-bar">
+    <button [class.active]="selectedCategoryId === null" (click)="filterByCategory(null)">All</button>
+    <button *ngFor="let cat of categories" 
+            [class.active]="selectedCategoryId === cat.id"
+            (click)="filterByCategory(cat.id)">
+      {{ cat.name }}
+    </button>
+  </div>
+
+  <!-- Menu Grid -->
+  <div class="menu-grid" *ngIf="filteredItems.length > 0">
+    <div class="menu-card" *ngFor="let item of filteredItems">
+      <div class="item-image" [style.backgroundImage]="'url(' + item.imageUrl + ')'">
+        <span class="category-tag">{{ getCategoryName(item.categoryId) }}</span>
+      </div>
+      <div class="item-info">
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.description }}</p>
+        <div class="price-row">
+          <span class="price">{{ item.price }} EGP</span>
+          <button class="add-btn" (click)="addToCart(item)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredItems.length === 0">
+    <div class="icon">🍽️</div>
+    <h2>No items available yet.</h2>
+    <p>Please check back later or try a different category.</p>
+  </div>
+</div>

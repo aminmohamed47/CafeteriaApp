@@ -1,0 +1,48 @@
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<div class="auth-page">
+  <div class="glass-container">
+    <div class="auth-brand">
+      <div class="logo-wrapper">🍔</div>
+      <h1>Welcome Back</h1>
+      <p>The best cafeteria experience awaits you</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="form-header">
+        <h2>Sign In</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="input-group">
+        <label>Username</label>
+        <div class="input-field">
+          <span class="icon">👤</span>
+          <input type="text" [(ngModel)]="username" placeholder="Enter your username" />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <div class="input-field">
+          <span class="icon">🔒</span>
+          <input type="password" [(ngModel)]="password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <button class="submit-btn" (click)='login()'>
+        <span>Sign In</span>
+        <span class="arrow">→</span>
+      </button>
+
+      <div class="error-box" *ngIf="error">
+        <span class="error-icon">⚠️</span> {{ error }}
+      </div>
+
+      <div class="auth-footer">
+        <p>New here? <a (click)="goToRegister()">Create an account</a></p>
+        <div class="admin-hint">Default: admin / admin123</div>
+      </div>
+    </div>
+  </div>
+</div>
