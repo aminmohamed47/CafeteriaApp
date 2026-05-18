@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { OrderService } from '../../services/order';
@@ -17,7 +17,9 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -29,19 +31,26 @@ export class OrdersComponent implements OnInit {
     this.orderService.getMyOrders().subscribe({
       next: (orders) => {
         console.log('Orders emission received:', orders);
-        this.orders = orders || [];
-        this.isLoading = false;
+        this.zone.run(() => {
+          this.orders = orders || [];
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        });
         console.log('isLoading set to false, orders count:', this.orders.length);
       },
       error: (err) => {
         console.error('Subscription error in OrdersComponent:', err);
-        this.isLoading = false;
+        this.zone.run(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        });
       }
     });
   }
 
-  getStatusClass(status: string) {
-    return status.toLowerCase();
+  getStatusClass(status: any): string {
+    if (!status) return 'pending';
+    return typeof status === 'string' ? status.toLowerCase() : 'pending';
   }
 
   goBack() {

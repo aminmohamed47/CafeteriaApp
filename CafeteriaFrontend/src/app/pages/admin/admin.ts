@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -35,7 +35,9 @@ export class AdminComponent implements OnInit {
   constructor(
     private menuService: MenuService,
     private orderService: OrderService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -45,32 +47,61 @@ export class AdminComponent implements OnInit {
   loadAll() {
     this.isOrdersLoading = true;
     this.orderService.getAllOrders().subscribe({
-      next: res => { this.orders = res; this.isOrdersLoading = false; },
-      error: () => { this.isOrdersLoading = false; }
+      next: res => {
+        this.zone.run(() => {
+          this.orders = res;
+          this.isOrdersLoading = false;
+          this.cdr.detectChanges();
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          this.isOrdersLoading = false;
+          this.cdr.detectChanges();
+        });
+      }
     });
+
     this.menuService.getCategories().subscribe(res => {
-      this.categories = res;
-      if (this.categories.length > 0) this.newItem.categoryId = this.categories[0].id;
+      this.zone.run(() => {
+        this.categories = res;
+        if (this.categories.length > 0) this.newItem.categoryId = this.categories[0].id;
+        this.cdr.detectChanges();
+      });
     });
-    this.menuService.getMenuItems().subscribe(res => this.menuItems = res);
+
+    this.menuService.getMenuItems().subscribe(res => {
+      this.zone.run(() => {
+        this.menuItems = res;
+        this.cdr.detectChanges();
+      });
+    });
   }
 
   updateOrderStatus(orderId: number, status: string) {
-    this.orderService.updateStatus(orderId, status).subscribe(() => this.loadAll());
+    this.orderService.updateStatus(orderId, status).subscribe(() => {
+      this.zone.run(() => {
+        this.loadAll();
+      });
+    });
   }
 
   saveMenuItem() {
     if (this.isEditing && this.editingId) {
       this.menuService.updateMenuItem(this.editingId, this.newItem).subscribe(() => {
-        alert('Item updated successfully! 🔄');
-        this.resetForm();
-        this.loadAll();
+        this.zone.run(() => {
+          alert('Item updated successfully! 🔄');
+          this.resetForm();
+          this.loadAll();
+        });
       });
     } else {
       this.menuService.createMenuItem(this.newItem).subscribe(() => {
-        alert('New item added successfully! ✅');
-        this.resetForm();
-        this.loadAll();
+        this.zone.run(() => {
+          alert('New item added successfully! ✅');
+          this.resetForm();
+          this.loadAll();
+        });
       });
     }
   }
@@ -86,12 +117,22 @@ export class AdminComponent implements OnInit {
     this.isEditing = false;
     this.editingId = null;
     this.newItem = { name: '', description: '', price: 0, categoryId: this.categories[0]?.id, imageUrl: '', isAvailable: true };
+    this.cdr.detectChanges();
   }
 
   deleteItem(id: number) {
     if (confirm('Are you sure you want to delete this item?')) {
-      this.menuService.deleteMenuItem(id).subscribe(() => this.loadAll());
+      this.menuService.deleteMenuItem(id).subscribe(() => {
+        this.zone.run(() => {
+          this.loadAll();
+        });
+      });
     }
+  }
+
+  getStatusClass(status: any): string {
+    if (!status) return 'pending';
+    return typeof status === 'string' ? status.toLowerCase() : 'pending';
   }
 
   goBack() {

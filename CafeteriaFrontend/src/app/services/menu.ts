@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, catchError, map } from 'rxjs';
+import { Observable, tap, catchError, map, throwError } from 'rxjs';
 import { MenuItem, Category } from '../models/types';
 
 @Injectable({
@@ -14,16 +14,22 @@ export class MenuService {
   getMenuItems(): Observable<MenuItem[]> {
     return this.http.get<MenuItem[]>(`${this.apiUrl}/Menu`).pipe(
       tap(items => console.log('Fetched Menu Items:', items)),
-      catchError(err => { console.error('Error fetching menu:', err); throw err; }),
-      map((res: any) => res.results || res)
+      map((res: any) => res.results || res),
+      catchError(err => { 
+        console.error('Error fetching menu:', err); 
+        return throwError(() => err); 
+      })
     );
   }
 
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}/Category`).pipe(
       tap(cats => console.log('Fetched Categories:', cats)),
-      catchError(err => { console.error('Error fetching categories:', err); throw err; }),
-      map((res: any) => res.results || res)
+      map((res: any) => res.results || res),
+      catchError(err => { 
+        console.error('Error fetching categories:', err); 
+        return throwError(() => err); 
+      })
     );
   }
 
