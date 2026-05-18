@@ -79,8 +79,29 @@
             <textarea [(ngModel)]="newItem.description"></textarea>
           </div>
           <div class="form-group">
-            <label>Image URL</label>
-            <input type="text" [(ngModel)]="newItem.imageUrl" placeholder="Image URL" />
+            <label>Product Image</label>
+            
+            <!-- Image Preview Box -->
+            <div class="image-uploader-preview" *ngIf="newItem.imageUrl">
+              <img [src]="newItem.imageUrl" alt="Preview" />
+              <button class="remove-image-btn" (click)="removeImage()" type="button" title="Remove Image">✕</button>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="image-uploader-dropzone" *ngIf="!newItem.imageUrl" (click)="fileInput.click()">
+              <span class="upload-icon">📸</span>
+              <span class="upload-text">Click to upload from device</span>
+              <span class="upload-subtext">Supports PNG, JPG, JPEG</span>
+            </div>
+
+            <!-- Hidden File Input -->
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none" />
+
+            <!-- Fallback URL Input -->
+            <div class="url-fallback">
+              <span class="or-separator">or paste image URL:</span>
+              <input type="text" [(ngModel)]="newItem.imageUrl" placeholder="https://example.com/image.jpg" />
+            </div>
           </div>
           <div class="form-actions">
             <button class="save-btn" (click)="saveMenuItem()">{{ isEditing ? 'Update Item' : 'Add to Menu' }}</button>

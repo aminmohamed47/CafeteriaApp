@@ -120,6 +120,25 @@ export class AdminComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.zone.run(() => {
+          this.newItem.imageUrl = e.target.result;
+          this.cdr.detectChanges();
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage() {
+    this.newItem.imageUrl = '';
+    this.cdr.detectChanges();
+  }
+
   deleteItem(id: number) {
     if (confirm('Are you sure you want to delete this item?')) {
       this.menuService.deleteMenuItem(id).subscribe(() => {

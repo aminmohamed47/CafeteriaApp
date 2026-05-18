@@ -1,4 +1,4 @@
-﻿using CafeteriaApp.Data;
+using CafeteriaApp.Data;
 using CafeteriaApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +55,7 @@ namespace CafeteriaApp.Controllers
             item.Price = updated.Price;
             item.IsAvailable = updated.IsAvailable;
             item.CategoryId = updated.CategoryId;
+            item.ImageUrl = updated.ImageUrl;
 
             await _db.SaveChangesAsync();
             return NoContent();
