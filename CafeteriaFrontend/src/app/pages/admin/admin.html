@@ -23,11 +23,17 @@
         </div>
 
         <ng-container *ngIf="!isOrdersLoading">
+          <div class="empty-state" *ngIf="orders.length === 0">
+            <div class="empty-icon">📋</div>
+            <h2>No orders yet</h2>
+            <p>There are no current orders to manage.</p>
+          </div>
+          
           <div class="order-card" *ngFor="let order of orders">
             <div class="order-info">
               <span class="order-num">Order #{{ order.id }}</span>
               <span class="user">{{ order.userName }}</span>
-              <span class="status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</span>
+              <span class="status" [ngClass]="getStatusClass(order.status)">{{ order.status }}</span>
             </div>
             <div class="order-items">
               <div class="item" *ngFor="let item of order.items">

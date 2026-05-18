@@ -5,45 +5,46 @@
     <button class="back-btn" (click)="goBack()">← Back to Menu</button>
     <h1>📋 Order History</h1>
   </div>
-
   <div class="loading-state" *ngIf="isLoading">
     <div class="spinner"></div>
     <p>Loading your orders...</p>
   </div>
 
-  <div class="orders-list" *ngIf="!isLoading && orders.length > 0; else noOrders">
-    <div class="order-card" *ngFor="let order of orders">
-      <div class="order-header">
-        <div class="order-id">
-          <span class="label">Order #</span>
-          <span class="value">{{ order.id }}</span>
+  <ng-container *ngIf="!isLoading">
+    <div class="orders-list" *ngIf="orders.length > 0; else noOrders">
+      <div class="order-card" *ngFor="let order of orders">
+        <div class="order-header">
+          <div class="order-id">
+            <span class="label">Order #</span>
+            <span class="value">{{ order.id }}</span>
+          </div>
+          <div class="order-date">{{ order.createdAt | date:'medium' }}</div>
+          <div class="order-status" [ngClass]="getStatusClass(order.status)">
+            {{ order.status }}
+          </div>
         </div>
-        <div class="order-date">{{ order.createdAt | date:'medium' }}</div>
-        <div class="order-status" [ngClass]="getStatusClass(order.status)">
-          {{ order.status }}
-        </div>
-      </div>
 
-      <div class="order-items">
-        <div class="item-row" *ngFor="let item of order.items">
-          <span class="item-name">{{ item.quantity }}x {{ item.itemName }}</span>
-          <span class="item-price">{{ item.price * item.quantity }} EGP</span>
+        <div class="order-items">
+          <div class="item-row" *ngFor="let item of order.items">
+            <span class="item-name">{{ item.quantity }}x {{ item.itemName }}</span>
+            <span class="item-price">{{ item.price * item.quantity }} EGP</span>
+          </div>
         </div>
-      </div>
 
-      <div class="order-footer">
-        <div class="total-label">Total Amount</div>
-        <div class="total-value">{{ order.totalPrice }} EGP</div>
+        <div class="order-footer">
+          <div class="total-label">Total Amount</div>
+          <div class="total-value">{{ order.totalPrice }} EGP</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <ng-template #noOrders>
-    <div class="empty-state" *ngIf="!isLoading">
-      <div class="empty-icon">📋</div>
-      <h2>No orders yet</h2>
-      <p>Your order history will appear here once you place an order.</p>
-      <button class="back-btn-large" (click)="goBack()">Order Now</button>
-    </div>
-  </ng-template>
+    <ng-template #noOrders>
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <h2>No orders yet</h2>
+        <p>Your order history will appear here once you place an order.</p>
+        <button class="back-btn-large" (click)="goBack()">Order Now</button>
+      </div>
+    </ng-template>
+  </ng-container>
 </div>
