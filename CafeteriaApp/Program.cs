@@ -6,8 +6,24 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using Serilog;
+
+// Configure Serilog Logger
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: "Logs/cafeteria-log-.txt",
+        rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Hook Serilog into ASP.NET Core
+builder.Host.UseSerilog();
 
 // Database
 builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -104,7 +120,19 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Database seeding error: {ex.Message}");
+    Log.Error(ex, "Database seeding failed during application startup");
 }
 
-app.Run();
+try
+{
+    Log.Information("Starting Cafeteria Web API host...");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Cafeteria Web API host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
