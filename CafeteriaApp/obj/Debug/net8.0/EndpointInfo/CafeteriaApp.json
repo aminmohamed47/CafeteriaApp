@@ -14,17 +14,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDto"
+                "$ref": "#/components/schemas/RegisterDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDto"
+                "$ref": "#/components/schemas/RegisterDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDto"
+                "$ref": "#/components/schemas/RegisterDto"
               }
             }
           }
@@ -338,7 +338,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OrderItemDto"
+                  "$ref": "#/components/schemas/CartItemDto"
                 }
               }
             },
@@ -346,7 +346,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OrderItemDto"
+                  "$ref": "#/components/schemas/CartItemDto"
                 }
               }
             },
@@ -354,7 +354,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OrderItemDto"
+                  "$ref": "#/components/schemas/CartItemDto"
                 }
               }
             }
@@ -367,7 +367,7 @@
         }
       }
     },
-    "/api/Order/admin": {
+    "/api/Order/all": {
       "get": {
         "tags": [
           "Order"
@@ -399,17 +399,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderStatus"
+                "type": "string"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderStatus"
+                "type": "string"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderStatus"
+                "type": "string"
               }
             }
           }
@@ -424,6 +424,20 @@
   },
   "components": {
     "schemas": {
+      "CartItemDto": {
+        "type": "object",
+        "properties": {
+          "menuItemId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Category": {
         "type": "object",
         "properties": {
@@ -481,28 +495,27 @@
         },
         "additionalProperties": false
       },
-      "OrderItemDto": {
+      "RegisterDto": {
         "type": "object",
         "properties": {
-          "menuItemId": {
-            "type": "integer",
-            "format": "int32"
+          "username": {
+            "type": "string",
+            "nullable": true
           },
-          "quantity": {
-            "type": "integer",
-            "format": "int32"
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobile": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
-      },
-      "OrderStatus": {
-        "enum": [
-          "Pending",
-          "Preparing",
-          "Ready",
-          "Delivered"
-        ],
-        "type": "string"
       },
       "UserDto": {
         "type": "object",

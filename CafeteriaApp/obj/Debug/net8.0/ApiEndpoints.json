@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "CafeteriaApp.Controllers.UserDto",
+        "Type": "CafeteriaApp.Controllers.RegisterDto",
         "IsRequired": true
       }
     ],
@@ -191,7 +191,7 @@
   },
   {
     "ContainingType": "CafeteriaApp.Controllers.OrderController",
-    "Method": "MyOrders",
+    "Method": "GetMyOrders",
     "RelativePath": "api/Order",
     "HttpMethod": "GET",
     "IsController": true,
@@ -209,7 +209,7 @@
     "Parameters": [
       {
         "Name": "items",
-        "Type": "System.Collections.Generic.List\u00601[[CafeteriaApp.Controllers.OrderItemDto, CafeteriaApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[CafeteriaApp.Controllers.CartItemDto, CafeteriaApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -238,8 +238,8 @@
   },
   {
     "ContainingType": "CafeteriaApp.Controllers.OrderController",
-    "Method": "AllOrders",
-    "RelativePath": "api/Order/admin",
+    "Method": "GetAllOrders",
+    "RelativePath": "api/Order/all",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

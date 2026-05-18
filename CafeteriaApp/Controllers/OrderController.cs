@@ -117,30 +117,8 @@ namespace CafeteriaApp.Controllers
             return BadRequest("Invalid status");
         }
 
-        // GET /api/orders/admin
-        [HttpGet("admin")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AllOrders()
-        {
-            var orders = await _db.Orders
-                .Include(o => o.Items)
-                .OrderByDescending(o => o.CreatedAt)
-                .ToListAsync();
-            return Ok(orders);
-        }
 
-        // PUT /api/orders/{id}/status
-        [HttpPut("{id}/status")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] OrderStatus status)
-        {
-            var order = await _db.Orders.FindAsync(id);
-            if (order is null) return NotFound();
-            order.Status = status;
-            await _db.SaveChangesAsync();
-            return NoContent();
-        }
     }
 
-    public record OrderItemDto(int MenuItemId, int Quantity);
+    public record CartItemDto(int MenuItemId, int Quantity);
 }

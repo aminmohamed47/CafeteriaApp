@@ -142,4 +142,5 @@ C:\Users\Amin\OneDrive\Desktop\CafeteriaApp\CafeteriaApp\obj\Debug\net8.0\refint
 C:\Users\Amin\OneDrive\Desktop\CafeteriaApp\CafeteriaApp\obj\Debug\net8.0\CafeteriaApp.pdb
 C:\Users\Amin\OneDrive\Desktop\CafeteriaApp\CafeteriaApp\obj\Debug\net8.0\CafeteriaApp.genruntimeconfig.cache
 C:\Users\Amin\OneDrive\Desktop\CafeteriaApp\CafeteriaApp\obj\Debug\net8.0\ref\CafeteriaApp.dll
+C:\Users\Amin\OneDrive\Desktop\CafeteriaApp\CafeteriaApp\obj\Debug\net8.0\CafeteriaApp.sourcelink.json
 C:\Users\Amin\OneDrive\Desktop\CafeteriaApp\CafeteriaApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
